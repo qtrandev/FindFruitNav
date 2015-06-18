@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Find Fruit</string>
+
+    <string name="title_section1">Map</string>
+    <string name="title_section2">Profile</string>
+    <string name="title_section3">Adventures</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">New Tree</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
