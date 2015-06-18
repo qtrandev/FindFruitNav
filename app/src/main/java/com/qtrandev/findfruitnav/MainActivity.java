@@ -53,7 +53,7 @@ public class MainActivity extends ActionBarActivity
         Fragment display = null;
         switch (position) {
             case 0:
-                display = PlaceholderFragment.newInstance(position + 1);
+                display = new MapFragment();
                 break;
             case 1:
                 display = ProfileFragment.newInstance("Name","Badges");
