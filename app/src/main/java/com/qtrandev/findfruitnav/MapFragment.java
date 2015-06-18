@@ -1,5 +1,6 @@
 package com.qtrandev.findfruitnav;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,8 +43,8 @@ public class MapFragment extends Fragment {
 
         googleMap = mMapView.getMap();
         // latitude and longitude
-        double latitude = 17.385044;
-        double longitude = 78.486671;
+        double latitude = 25.7717896;
+        double longitude = -80.2412616;
 
         // create marker
         MarkerOptions marker = new MarkerOptions().position(
@@ -86,5 +87,11 @@ public class MapFragment extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(1);
     }
 }
