@@ -18,6 +18,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, AchievementsFragment.OnFragmentInteractionListener {
@@ -27,6 +35,8 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
+    private MapFragment mMapFragment;
+
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -35,6 +45,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -53,7 +64,7 @@ public class MainActivity extends ActionBarActivity
         Fragment display = null;
         switch (position) {
             case 0:
-                display = new MapFragment();
+                display = getMapFragment();
                 break;
             case 1:
                 display = ProfileFragment.newInstance("Name","Badges");
@@ -123,6 +134,37 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFragmentInteraction(String id) {
 
+    }
+
+    private MapFragment getMapFragment() {
+        if (mMapFragment == null) {
+            mMapFragment = new MapFragment();
+            Firebase myFirebaseRef = new Firebase("https://findfruit.firebaseio.com/");
+            myFirebaseRef.child("tree").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot tree : snapshot.getChildren()) {
+                        Double lat = tree.child("lat").getValue(Double.class);
+                        Double lng = tree.child("lng").getValue(Double.class);
+                        LatLng latlng = new LatLng(lat,lng);
+                        String title = tree.child("treetype").getValue(String.class);
+                        String allowPick = tree.child("allowpick").getValue(String.class);
+                        String content = "Allowed Picking: "+allowPick;
+                        float markerColor = BitmapDescriptorFactory.HUE_RED;
+                        if (allowPick.equals("Yes")) {
+                            markerColor = BitmapDescriptorFactory.HUE_GREEN;
+                        }
+                        mMapFragment.getMap().addMarker(new MarkerOptions()
+                                .position(latlng)
+                                .title(title)
+                                .snippet(content)
+                                .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+                    }
+                }
+                @Override public void onCancelled(FirebaseError error) { }
+            });
+        }
+        return mMapFragment;
     }
 
     /**
