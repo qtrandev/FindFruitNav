@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, AchievementsFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -49,10 +49,24 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
+        Fragment display = null;
+        switch (position) {
+            case 0:
+                display = PlaceholderFragment.newInstance(position + 1);
+                break;
+            case 1:
+                display = ProfileFragment.newInstance("Name","Badges");
+                break;
+            case 2:
+                display = AchievementsFragment.newInstance("Mango Hunt", "Lychee Treat");
+                break;
+        }
+
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, display)
                 .commit();
     }
 
@@ -106,6 +120,11 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(String id) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -135,6 +154,8 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText("Section "+getArguments().getInt(ARG_SECTION_NUMBER));
             return rootView;
         }
 
