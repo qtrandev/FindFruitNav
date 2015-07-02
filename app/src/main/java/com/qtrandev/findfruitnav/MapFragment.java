@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -44,11 +46,14 @@ public class MapFragment extends Fragment {
             }
 
             googleMap = mMapView.getMap();
+            googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(25.7717896, -80.2412616)).zoom(9).build();
             googleMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
         return v;
     }
@@ -56,25 +61,25 @@ public class MapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //mMapView.onResume();
+        mMapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //mMapView.onPause();
+        mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //mMapView.onDestroy();
+        mMapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        //mMapView.onLowMemory();
+        mMapView.onLowMemory();
     }
 
     @Override
@@ -85,5 +90,31 @@ public class MapFragment extends Fragment {
 
     public GoogleMap getMap() {
         return googleMap;
+    }
+
+    class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
+
+        private final View myContentsView;
+
+        MyInfoWindowAdapter(){
+            myContentsView = getActivity().getLayoutInflater().inflate(R.layout.custom_info_contents, null);
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+
+            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.title));
+            tvTitle.setText(marker.getTitle());
+            TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
+            tvSnippet.setText(marker.getSnippet());
+
+            return myContentsView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
     }
 }
