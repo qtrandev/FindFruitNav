@@ -99,6 +99,8 @@ public class MainActivity extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(mTitle);
     }
 
@@ -137,7 +139,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     private MapFragment getMapFragment() {
-        if (mMapFragment == null) {
             mMapFragment = new MapFragment();
             Firebase myFirebaseRef = new Firebase("https://findfruit.firebaseio.com/");
             myFirebaseRef.child("tree").addValueEventListener(new ValueEventListener() {
@@ -163,8 +164,14 @@ public class MainActivity extends ActionBarActivity
                 }
                 @Override public void onCancelled(FirebaseError error) { }
             });
-        }
         return mMapFragment;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mNavigationDrawerFragment.syncState();
     }
 
     /**

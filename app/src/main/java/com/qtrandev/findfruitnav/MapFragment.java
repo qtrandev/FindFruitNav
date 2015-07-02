@@ -30,7 +30,6 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (v == null) {
             // inflate and return the layout
             v = inflater.inflate(R.layout.fragment_map, container,
                     false);
@@ -54,7 +53,6 @@ public class MapFragment extends Fragment {
                     .newCameraPosition(cameraPosition));
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
-        }
         return v;
     }
 
