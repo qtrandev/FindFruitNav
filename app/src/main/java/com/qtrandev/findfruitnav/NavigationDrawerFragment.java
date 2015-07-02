@@ -103,7 +103,7 @@ public class NavigationDrawerFragment extends Fragment {
         ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
         mNavItems.add(new NavItem("Map", "Find fruits", R.drawable.ic_action_map));
         mNavItems.add(new NavItem("Profile", "View status", R.drawable.ic_action_group));
-        mNavItems.add(new NavItem("Achievements", "Get points", R.drawable.ic_action_view_as_list));
+        mNavItems.add(new NavItem("Adventures", "Get points", R.drawable.ic_action_view_as_list));
 
         DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
         mDrawerListView.setAdapter(adapter);
@@ -261,7 +261,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "New Tree", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Long-press on map to add a new tree", Toast.LENGTH_SHORT).show();
             return true;
         }
 
