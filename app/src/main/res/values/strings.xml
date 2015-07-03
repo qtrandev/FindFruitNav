@@ -14,4 +14,11 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tree_prompt">Choose a type</string>
+    <string-array name="tree_arrays">
+        <item>Mango</item>
+        <item>Avocado</item>
+        <item>Lychee</item>
+    </string-array>
 </resources>

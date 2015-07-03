@@ -1,6 +1,7 @@
 package com.qtrandev.findfruitnav;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,10 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,6 +32,8 @@ public class MapFragment extends Fragment {
     MapView mMapView;
     private GoogleMap googleMap;
     private View v;
+    private double currentLat = 0;
+    private double currentLon = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +54,58 @@ public class MapFragment extends Fragment {
 
             googleMap = mMapView.getMap();
             googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+
+            Firebase myFirebaseRef = new Firebase("https://findfruit.firebaseio.com/");
+            myFirebaseRef.child("tree").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot tree : snapshot.getChildren()) {
+                        Double lat = tree.child("lat").getValue(Double.class);
+                        Double lng = tree.child("lng").getValue(Double.class);
+                        LatLng latlng = new LatLng(lat, lng);
+                        String title = tree.child("treetype").getValue(String.class);
+                        String allowPick = tree.child("allowpick").getValue(String.class);
+                        String content = "Allowed Picking: " + allowPick;
+                        float markerColor = BitmapDescriptorFactory.HUE_RED;
+                        if (allowPick.equals("Yes")) {
+                            markerColor = BitmapDescriptorFactory.HUE_GREEN;
+                        }
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(latlng)
+                                .title(title)
+                                .snippet(content)
+                                .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) { }
+            });
+
+            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker arg0) {
+                    if (arg0.getTitle().equals("Add New Tree")) {
+                        Intent i = new Intent(getActivity(), NewTreeActivity.class);
+                        i.putExtra("Lat", currentLat);
+                        i.putExtra("Lon", currentLon);
+                        startActivity(i);
+                    }
+                }
+            });
+
+            googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng point) {
+                    currentLat = point.latitude;
+                    currentLon = point.longitude;
+                    Marker marker = googleMap.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title("Add New Tree")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    marker.showInfoWindow();
+                }
+            });
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(25.7717896, -80.2412616)).zoom(9).build();
