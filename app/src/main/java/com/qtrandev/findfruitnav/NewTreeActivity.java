@@ -29,6 +29,13 @@ public class NewTreeActivity extends ActionBarActivity {
             }
         });
 
+        Button cancelButton = (Button) findViewById(R.id.button6);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                 cancelClicked();
+            }
+        });
+
         if (getIntent().getExtras() != null) {
             lat = getIntent().getExtras().getDouble("Lat");
             lon = getIntent().getExtras().getDouble("Lon");
@@ -40,6 +47,11 @@ public class NewTreeActivity extends ActionBarActivity {
         Firebase trees = ref.child("tree");
         Tree newTree = new Tree(type, lat, lon);
         trees.push().setValue(newTree.getTreeToWrite());
+        finish();
+    }
+
+    private void cancelClicked() {
+        finish();
     }
 
 
