@@ -1,6 +1,8 @@
 package com.qtrandev.findfruitnav;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -156,6 +158,20 @@ public class MainActivity extends ActionBarActivity
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mNavigationDrawerFragment.syncState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MainActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /**
