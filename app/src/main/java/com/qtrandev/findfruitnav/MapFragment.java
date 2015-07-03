@@ -34,6 +34,7 @@ public class MapFragment extends Fragment {
     private View v;
     private double currentLat = 0;
     private double currentLon = 0;
+    private Marker newMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,17 +100,18 @@ public class MapFragment extends Fragment {
                 public void onMapLongClick(LatLng point) {
                     currentLat = point.latitude;
                     currentLon = point.longitude;
-                    Marker marker = googleMap.addMarker(new MarkerOptions()
+                    newMarker = googleMap.addMarker(new MarkerOptions()
                             .position(point)
                             .title("Add New Tree")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    marker.showInfoWindow();
+                    newMarker.showInfoWindow();
                 }
             });
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(25.7717896, -80.2412616)).zoom(9).build();
-            googleMap.animateCamera(CameraUpdateFactory
+
+            googleMap.moveCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -120,6 +122,10 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        if (newMarker != null) {
+            newMarker.setVisible(false);
+            newMarker = null;
+        }
     }
 
     @Override
