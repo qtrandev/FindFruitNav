@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -24,6 +25,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A fragment that launches other parts of the demo application.
  */
@@ -35,6 +40,7 @@ public class MapFragment extends Fragment {
     private double currentLat = 0;
     private double currentLon = 0;
     private Marker newMarker;
+    private HashMap<Marker,Tree> treeMarkerReference = new HashMap<Marker,Tree>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +66,8 @@ public class MapFragment extends Fragment {
             myFirebaseRef.child("tree").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
+                    googleMap.clear();
+                    treeMarkerReference.clear();
                     for (DataSnapshot tree : snapshot.getChildren()) {
                         Double lat = tree.child("lat").getValue(Double.class);
                         Double lng = tree.child("lng").getValue(Double.class);
@@ -71,11 +79,13 @@ public class MapFragment extends Fragment {
                         if (allowPick.equals("Yes")) {
                             markerColor = BitmapDescriptorFactory.HUE_GREEN;
                         }
-                        googleMap.addMarker(new MarkerOptions()
+                        Tree newTree = new Tree(tree.getKey(), title, lat, lng);
+                        Marker savedMarker = googleMap.addMarker(new MarkerOptions()
                                 .position(latlng)
                                 .title(title)
                                 .snippet(content)
                                 .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+                        treeMarkerReference.put(savedMarker,newTree);
                     }
                 }
 
@@ -92,8 +102,10 @@ public class MapFragment extends Fragment {
                         i.putExtra("Lon", currentLon);
                         startActivity(i);
                     } else {
+                        Tree savedTree = treeMarkerReference.get(arg0);
                         Intent i = new Intent(getActivity(), TreeActivity.class);
-                        i.putExtra("Type", arg0.getTitle());
+                        i.putExtra("Id", savedTree.getId());
+                        i.putExtra("Type", savedTree.getType());
                         startActivity(i);
                     }
                 }
@@ -175,6 +187,23 @@ public class MapFragment extends Fragment {
             tvTitle.setText(marker.getTitle());
             TextView tvSnippet = ((TextView)myContentsView.findViewById(R.id.snippet));
             tvSnippet.setText(marker.getSnippet());
+            ImageView imageView = (ImageView)myContentsView.findViewById(R.id.image);
+            switch (marker.getTitle()) {
+                case "Mango":
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.mango));
+                    break;
+                case "Avocado":
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.avocado));
+                    break;
+                case "Lychee":
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.lychee));
+                    break;
+                case "Longan":
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.longan));
+                    break;
+                default:
+                    imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+            }
 
             return myContentsView;
         }

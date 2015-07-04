@@ -18,6 +18,7 @@ public class Tree {
     private static String PROP_TREETYPE = "treetype";
     private static String PROP_VERIFIED = "verified";
 
+    private String id;
     private String type;
     private Double lat;
     private Double lng;
@@ -30,6 +31,11 @@ public class Tree {
     private String publiclocation = "No";
 
     public Tree(String type, Double lat, Double lng) {
+        this(null, type, lat, lng);
+    }
+
+    public Tree(String id, String type, Double lat, Double lng) {
+        this.id = id;
         this.type = type;
         this.lat = lat;
         this.lng = lng;
@@ -74,5 +80,13 @@ public class Tree {
                 this.season = "May to November";
                 break;
         }
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getType() {
+        return this.type;
     }
 }

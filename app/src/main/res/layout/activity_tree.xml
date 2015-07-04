@@ -117,39 +117,39 @@
         android:layout_below="@+id/textView17"
         android:layout_centerHorizontal="true" />
 
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratingBar3"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/ratingBar2"
-        android:layout_alignStart="@+id/ratingBar2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Rate:"
-        android:id="@+id/textView18"
-        android:layout_above="@+id/ratingBar3"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check-in"
-        android:id="@+id/button7"
-        android:layout_above="@+id/textView16"
-        android:layout_toRightOf="@+id/textView12"
-        android:layout_toEndOf="@+id/textView12" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Message"
         android:id="@+id/button8"
-        android:layout_above="@+id/textView16"
-        android:layout_toRightOf="@+id/button7"
-        android:layout_toEndOf="@+id/button7" />
+        android:layout_below="@+id/textView8"
+        android:layout_alignRight="@+id/ratingBar2"
+        android:layout_alignEnd="@+id/ratingBar2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/cancelButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/ratingBar2"
+        android:layout_alignStart="@+id/ratingBar2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/deleteButton"
+        android:layout_alignTop="@+id/cancelButton"
+        android:layout_alignRight="@+id/ratingBar2"
+        android:layout_alignEnd="@+id/ratingBar2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-In"
+        android:id="@+id/checkInButton"
+        android:layout_below="@+id/textView8"
+        android:layout_alignLeft="@+id/ratingBar2"
+        android:layout_alignStart="@+id/ratingBar2" />
 </RelativeLayout>

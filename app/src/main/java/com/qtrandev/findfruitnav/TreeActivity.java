@@ -1,15 +1,24 @@
 package com.qtrandev.findfruitnav;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 
 public class TreeActivity extends ActionBarActivity {
 
     private TextView titleTextView;
+    private String treeId;
+    private String treeType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +28,24 @@ public class TreeActivity extends ActionBarActivity {
 
         titleTextView = (TextView) findViewById(R.id.textView8);
 
-        if (getIntent().getExtras() != null) {
-            String type = getIntent().getExtras().getString("Type");
-            titleTextView.setText(type+" Tree");
+        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                cancelClicked();
+            }
+        });
 
-            String id = getIntent().getExtras().getString("Id");
+        Button deleteButton = (Button) findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deleteClicked();
+            }
+        });
+
+        if (getIntent().getExtras() != null) {
+            treeId = getIntent().getExtras().getString("Type");
+            treeType = getIntent().getExtras().getString("Type");
+            titleTextView.setText(treeType+" Tree");
         }
 
     }
@@ -49,5 +71,36 @@ public class TreeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void cancelClicked() {
+        finish();
+    }
+
+    private void deleteClicked() {
+        new AlertDialog.Builder(this)
+                .setMessage("Delete the "+treeType+" tree?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteTree();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void deleteTree() {
+        Firebase ref = new Firebase("https://findfruit.firebaseio.com/");
+        Firebase trees = ref.child("tree");
+        trees.child(treeId).removeValue(new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if (firebaseError != null) {
+                    System.out.println(firebaseError.getMessage());
+                }
+            }
+        });
     }
 }
