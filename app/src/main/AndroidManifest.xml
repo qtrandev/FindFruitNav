@@ -37,6 +37,10 @@
             android:label="Adventure" >
         </activity>
         <activity
+            android:name=".TreeActivity"
+            android:label="Tree" >
+        </activity>
+        <activity
             android:name=".NewTreeActivity"
             android:label="New Tree" >
         </activity>

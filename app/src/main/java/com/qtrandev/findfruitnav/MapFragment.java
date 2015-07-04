@@ -91,6 +91,10 @@ public class MapFragment extends Fragment {
                         i.putExtra("Lat", currentLat);
                         i.putExtra("Lon", currentLon);
                         startActivity(i);
+                    } else {
+                        Intent i = new Intent(getActivity(), TreeActivity.class);
+                        i.putExtra("Type", arg0.getTitle());
+                        startActivity(i);
                     }
                 }
             });
