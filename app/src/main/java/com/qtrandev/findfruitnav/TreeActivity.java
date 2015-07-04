@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -43,7 +44,7 @@ public class TreeActivity extends ActionBarActivity {
         });
 
         if (getIntent().getExtras() != null) {
-            treeId = getIntent().getExtras().getString("Type");
+            treeId = getIntent().getExtras().getString("Id");
             treeType = getIntent().getExtras().getString("Type");
             titleTextView.setText(treeType+" Tree");
         }
@@ -79,11 +80,12 @@ public class TreeActivity extends ActionBarActivity {
 
     private void deleteClicked() {
         new AlertDialog.Builder(this)
-                .setMessage("Delete the "+treeType+" tree?")
+                .setMessage("Remove the "+treeType+" tree?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         deleteTree();
+                        Toast.makeText(TreeActivity.this, treeType+" tree removed", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })
