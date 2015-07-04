@@ -29,14 +29,11 @@ public class Tree {
     private String season = "May to November";
     private String publiclocation = "No";
 
-    public Tree() {
-
-    }
-
     public Tree(String type, Double lat, Double lng) {
         this.type = type;
         this.lat = lat;
         this.lng = lng;
+        processType(type);
     }
 
     public Map<String, Object> getTreeToWrite() {
@@ -52,5 +49,30 @@ public class Tree {
         newTree.put(PROP_SEASON, season);
         newTree.put(PROP_PUBLICLOCATION, publiclocation);
         return newTree;
+    }
+
+    private void processType(String treeType) {
+        switch (treeType) {
+            case "Mango":
+                this.marker = "leaf";
+                this.fulltype = "Mangifera indica";
+                this.season = "May to November";
+                break;
+            case "Avocado":
+                this.marker = "tree";
+                this.fulltype = "Persea americana";
+                this.season = "May to November";
+                break;
+            case "Lychee":
+                this.marker = "pagelines";
+                this.fulltype = "Litchi chinensis";
+                this.season = "May to November";
+                break;
+            case "Longan":
+                this.marker = "share-alt";
+                this.fulltype = "Dimocarpus longan";
+                this.season = "May to November";
+                break;
+        }
     }
 }

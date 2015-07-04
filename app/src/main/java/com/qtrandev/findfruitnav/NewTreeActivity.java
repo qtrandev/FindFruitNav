@@ -6,21 +6,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
 
 public class NewTreeActivity extends ActionBarActivity {
 
+    private Spinner typeSpinner;
     private double lat = 0;
     private double lon = 0;
-    private String type = "Mango";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_tree);
         setTitle("New Tree");
+
+        typeSpinner = (Spinner) findViewById(R.id.spinner);
 
         Button saveButton = (Button) findViewById(R.id.button5);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -45,8 +49,10 @@ public class NewTreeActivity extends ActionBarActivity {
     private void saveClicked() {
         Firebase ref = new Firebase("https://findfruit.firebaseio.com/");
         Firebase trees = ref.child("tree");
-        Tree newTree = new Tree(type, lat, lon);
+        String treeType = typeSpinner.getSelectedItem().toString();
+        Tree newTree = new Tree(treeType, lat, lon);
         trees.push().setValue(newTree.getTreeToWrite());
+        Toast.makeText(this, treeType+" tree added", Toast.LENGTH_SHORT).show();
         finish();
     }
 
